@@ -1,0 +1,56 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="init_add_sequence" author="demo">
+        <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="50"/>
+    </changeSet>
+
+    <changeSet id="init_create_user_table" author="demo">
+        <createTable tableName="users">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="init_create_shift_table" author="demo">
+        <createTable tableName="shift">
+            <column name="code" type="varchar(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="init_add_foreign_key_constraint"
+               author="Kyrylo Chornobryvets">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="shift"
+                                 constraintName="FK_SHIFT_ON_USER"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
+    <changeSet id="init_load_user_table_data" author="demo">
+        <loadData file="db/changelog/users.csv" relativeToChangelogFile="false" tableName="users">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="init_load_shift_table_data" author="demo">
+        <loadData file="db/changelog/shifts.csv" relativeToChangelogFile="false" tableName="shift">
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
