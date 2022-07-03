@@ -61,8 +61,12 @@ public class UserService {
 		else if (totalIdPredicate != null) finalPredicate = totalIdPredicate;
 		else if (datePredicate != null) finalPredicate = datePredicate;
 
-		criteriaQuery.where(finalPredicate);
-		return entityManager.createQuery(criteriaQuery).getResultList();
+		if (finalPredicate != null) {
+			criteriaQuery.where(finalPredicate);
+			return entityManager.createQuery(criteriaQuery).getResultList();
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	private List<User> findWithRepo(UserCriteria userCriteria) {
